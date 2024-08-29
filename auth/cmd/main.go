@@ -5,6 +5,7 @@ import (
 	"os"
 	"path/filepath"
 	"zatrasz75/gRPC_Interaction/auth/configs"
+	"zatrasz75/gRPC_Interaction/auth/internal/app"
 	logger "zatrasz75/gRPC_Interaction/auth/pkg"
 )
 
@@ -18,12 +19,13 @@ func main() {
 		return
 	}
 	// Построение абсолютного пути к файлу configs.yml
-	configPath := filepath.Join(cwd, "configs", "configs.yml")
+	configPath := filepath.Join(cwd, "auth/configs", "configs.yml")
 
 	// Configuration
 	cfg, err := configs.NewConfig(configPath)
 	if err != nil {
 		l.Fatal("ошибка при разборе конфигурационного файла", err)
 	}
-	fmt.Println(cfg)
+
+	app.Run(cfg, l)
 }

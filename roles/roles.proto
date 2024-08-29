@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package roles;
+
+option go_package = "roles/pkg/grpc/roles";
+
+service Roles {
+  rpc GetUserRoles(UserIdRequest) returns (UserRolesResponse) {}
+}
+
+message UserIdRequest {
+  string ID = 1;
+
+}
+
+message UserRolesResponse {
+  string Roles = 1;
+}

@@ -1,3 +1,13 @@
 GRPC:
-  host: 0.0.0.0
-  port: 50051
+  host: 127.0.0.1
+  port: 50052
+
+database:
+  DB_CONNECTION_STRING: postgres://zatrasz:postgrespw@localhost:49051/Interaction-gRPC?sslmode=disable
+
+  host: postgres
+  username: zatrasz
+  password: postgrespw
+  db-url: localhost
+  db-name: Interaction-gRPC
+  port: 49051
