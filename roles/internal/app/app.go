@@ -5,15 +5,14 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
-	"zatrasz75/gRPC_Interaction/auth/configs"
-	"zatrasz75/gRPC_Interaction/auth/internal/handlers"
-	"zatrasz75/gRPC_Interaction/auth/internal/repository"
-	"zatrasz75/gRPC_Interaction/auth/pkg/gRPCLogger"
-	"zatrasz75/gRPC_Interaction/auth/pkg/gRPCserver"
-	authPb "zatrasz75/gRPC_Interaction/auth/pkg/grpc/auth"
-	"zatrasz75/gRPC_Interaction/auth/pkg/hash"
-	"zatrasz75/gRPC_Interaction/auth/pkg/logger"
-	"zatrasz75/gRPC_Interaction/auth/pkg/postgres"
+	"zatrasz75/gRPC_Interaction/roles/configs"
+	"zatrasz75/gRPC_Interaction/roles/internal/handlers"
+	"zatrasz75/gRPC_Interaction/roles/internal/repository"
+	"zatrasz75/gRPC_Interaction/roles/pkg/gRPCLogger"
+	"zatrasz75/gRPC_Interaction/roles/pkg/gRPCserver"
+	rplesPb "zatrasz75/gRPC_Interaction/roles/pkg/grpc/roles"
+	"zatrasz75/gRPC_Interaction/roles/pkg/logger"
+	"zatrasz75/gRPC_Interaction/roles/pkg/postgres"
 )
 
 func Run(cfg *configs.Config, l logger.LoggersInterface) {
@@ -28,8 +27,7 @@ func Run(cfg *configs.Config, l logger.LoggersInterface) {
 		l.Fatal("ошибка миграции", err)
 	}
 	repo := repository.New(pg)
-	haser := hash.NewSGA1Haser(cfg.Token.Salt)
-	storeHandler := handlers.New(repo, l, cfg, haser)
+	storeHandler := handlers.New(repo, l, cfg)
 
 	lg := gRPCLogger.NewGRPCLogger()
 	loggingInterceptor := gRPCLogger.LogUnaryServerInterceptor(lg)
@@ -67,5 +65,5 @@ func Run(cfg *configs.Config, l logger.LoggersInterface) {
 }
 
 func registerHandlers(s *grpc.Server, handler *handlers.Store) {
-	authPb.RegisterAuthServer(s, handler)
+	rplesPb.RegisterRolesServer(s, handler)
 }

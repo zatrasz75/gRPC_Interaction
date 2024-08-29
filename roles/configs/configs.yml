@@ -11,3 +11,6 @@ database:
   db-url: localhost
   db-name: Interaction-gRPC
   port: 49051
+
+token:
+  secret-key-here: secret_password

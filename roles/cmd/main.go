@@ -5,7 +5,8 @@ import (
 	"os"
 	"path/filepath"
 	"zatrasz75/gRPC_Interaction/roles/configs"
-	logger "zatrasz75/gRPC_Interaction/roles/pkg"
+	"zatrasz75/gRPC_Interaction/roles/internal/app"
+	"zatrasz75/gRPC_Interaction/roles/pkg/logger"
 )
 
 func main() {
@@ -25,7 +26,6 @@ func main() {
 	if err != nil {
 		l.Fatal("ошибка при разборе конфигурационного файла", err)
 	}
-	fmt.Println(cfg)
 
-	//app.Run(cfg, l)
+	app.Run(cfg, l)
 }

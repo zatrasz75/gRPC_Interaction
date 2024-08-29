@@ -9,7 +9,7 @@ import (
 type Config struct {
 	GRPC struct {
 		AddrHost string `yaml:"host" env:"APP_IP" env-default:"localhost"`
-		AddrPort string `yaml:"port" env:"APP_PORT" env-default:"50051"`
+		AddrPort string `yaml:"port" env:"APP_PORT" env-default:"50052"`
 	} `yaml:"GRPC"`
 	PostgreSQL struct {
 		ConnStr string `env:"DB_CONNECTION_STRING"`
@@ -25,6 +25,9 @@ type Config struct {
 		ConnAttempts int           `yaml:"conn-attempts" env:"PG_CONN_ATTEMPTS" env-default:"5"`
 		ConnTimeout  time.Duration `yaml:"conn-timeout" env:"PG_TIMEOUT" env-default:"2s"`
 	} `yaml:"database"`
+	Token struct {
+		SecretKeyHere string `yaml:"secret-key-here" env:"SECRET_KEY_TOKEN"`
+	} `yaml:"token"`
 }
 
 func NewConfig(path string) (*Config, error) {

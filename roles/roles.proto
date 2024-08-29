@@ -14,5 +14,5 @@ message UserIdRequest {
 }
 
 message UserRolesResponse {
-  string Roles = 1;
+  repeated string Roles = 1;
 }

@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"zatrasz75/gRPC_Interaction/auth/configs"
 	"zatrasz75/gRPC_Interaction/auth/internal/app"
-	logger "zatrasz75/gRPC_Interaction/auth/pkg"
+	"zatrasz75/gRPC_Interaction/auth/pkg/logger"
 )
 
 func main() {

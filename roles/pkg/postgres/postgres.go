@@ -7,7 +7,7 @@ import (
 	"github.com/jackc/pgx/v5/stdlib"
 	"github.com/rubenv/sql-migrate"
 	"time"
-	logger "zatrasz75/gRPC_Interaction/roles/pkg"
+	"zatrasz75/gRPC_Interaction/roles/pkg/logger"
 )
 
 // Postgres Хранилище данных
