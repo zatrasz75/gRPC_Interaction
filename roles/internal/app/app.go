@@ -8,6 +8,7 @@ import (
 	"zatrasz75/gRPC_Interaction/roles/configs"
 	"zatrasz75/gRPC_Interaction/roles/internal/handlers"
 	"zatrasz75/gRPC_Interaction/roles/internal/repository"
+	"zatrasz75/gRPC_Interaction/roles/internal/tokens"
 	"zatrasz75/gRPC_Interaction/roles/pkg/gRPCLogger"
 	"zatrasz75/gRPC_Interaction/roles/pkg/gRPCserver"
 	rplesPb "zatrasz75/gRPC_Interaction/roles/pkg/grpc/roles"
@@ -30,11 +31,13 @@ func Run(cfg *configs.Config, l logger.LoggersInterface) {
 	storeHandler := handlers.New(repo, l, cfg)
 
 	lg := gRPCLogger.NewGRPCLogger()
+	authInterceptor := tokens.AuthInterceptor(cfg.Token.SecretKeyHere)
 	loggingInterceptor := gRPCLogger.LogUnaryServerInterceptor(lg)
 
 	// Передаем список interceptor'ов
 	interceptors := []grpc.UnaryServerInterceptor{
 		loggingInterceptor,
+		authInterceptor,
 	}
 
 	options := gRPCserver.OptionSet(cfg.GRPC.AddrHost, cfg.GRPC.AddrPort)
