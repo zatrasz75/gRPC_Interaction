@@ -20,6 +20,7 @@ const _ = grpc.SupportPackageIsVersion9
 
 const (
 	Roles_GetUserRoles_FullMethodName = "/roles.Roles/GetUserRoles"
+	Roles_GetRoles_FullMethodName     = "/roles.Roles/GetRoles"
 )
 
 // RolesClient is the client API for Roles service.
@@ -27,6 +28,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type RolesClient interface {
 	GetUserRoles(ctx context.Context, in *UserIdRequest, opts ...grpc.CallOption) (*UserRolesResponse, error)
+	GetRoles(ctx context.Context, in *IdRequest, opts ...grpc.CallOption) (*RolesResponse, error)
 }
 
 type rolesClient struct {
@@ -47,11 +49,22 @@ func (c *rolesClient) GetUserRoles(ctx context.Context, in *UserIdRequest, opts 
 	return out, nil
 }
 
+func (c *rolesClient) GetRoles(ctx context.Context, in *IdRequest, opts ...grpc.CallOption) (*RolesResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RolesResponse)
+	err := c.cc.Invoke(ctx, Roles_GetRoles_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // RolesServer is the server API for Roles service.
 // All implementations must embed UnimplementedRolesServer
 // for forward compatibility.
 type RolesServer interface {
 	GetUserRoles(context.Context, *UserIdRequest) (*UserRolesResponse, error)
+	GetRoles(context.Context, *IdRequest) (*RolesResponse, error)
 	mustEmbedUnimplementedRolesServer()
 }
 
@@ -64,6 +77,9 @@ type UnimplementedRolesServer struct{}
 
 func (UnimplementedRolesServer) GetUserRoles(context.Context, *UserIdRequest) (*UserRolesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUserRoles not implemented")
+}
+func (UnimplementedRolesServer) GetRoles(context.Context, *IdRequest) (*RolesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetRoles not implemented")
 }
 func (UnimplementedRolesServer) mustEmbedUnimplementedRolesServer() {}
 func (UnimplementedRolesServer) testEmbeddedByValue()               {}
@@ -104,6 +120,24 @@ func _Roles_GetUserRoles_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Roles_GetRoles_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(IdRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RolesServer).GetRoles(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Roles_GetRoles_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RolesServer).GetRoles(ctx, req.(*IdRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Roles_ServiceDesc is the grpc.ServiceDesc for Roles service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -114,6 +148,10 @@ var Roles_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetUserRoles",
 			Handler:    _Roles_GetUserRoles_Handler,
+		},
+		{
+			MethodName: "GetRoles",
+			Handler:    _Roles_GetRoles_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

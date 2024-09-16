@@ -12,3 +12,6 @@ database:
 
 token:
   secret-key-here: secret_password
+
+internal:
+  roles_Service_Address: 127.0.0.1:5002

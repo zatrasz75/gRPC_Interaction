@@ -25,3 +25,18 @@ func (s *Store) GetUserRoles(c context.Context, request *rplesPb.UserIdRequest) 
 		Roles: u.Roles,
 	}, nil
 }
+
+func (s *Store) GetRoles(c context.Context, request *rplesPb.IdRequest) (response *rplesPb.RolesResponse, err error) {
+	id, _ := strconv.Atoi(request.ID)
+
+	var u models.Users
+	u.Roles, err = s.repo.ListOfUserRoles(id)
+	if err != nil {
+		s.l.Error("ListOfUserRoles()", err)
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	return &rplesPb.RolesResponse{
+		Roles: u.Roles,
+	}, nil
+}

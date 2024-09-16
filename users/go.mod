@@ -8,8 +8,11 @@ require (
 	github.com/jackc/pgx/v5 v5.6.0
 	github.com/rubenv/sql-migrate v1.7.0
 	google.golang.org/grpc v1.66.2
-	google.golang.org/protobuf v1.34.1
+	google.golang.org/protobuf v1.34.2
+	zatrasz75/gRPC_Interaction/roles v0.0.0 // добавлено для локального модуля roles
 )
+
+replace zatrasz75/gRPC_Interaction/roles => ../roles
 
 require (
 	github.com/BurntSushi/toml v1.2.1 // indirect

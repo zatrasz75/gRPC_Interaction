@@ -15,7 +15,7 @@ import (
 // AuthInterceptor проверяет JWT токен, извлекает данные и добавляет их в контекст.
 func AuthInterceptor(secretKey string) grpc.UnaryServerInterceptor {
 	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (resp interface{}, err error) {
-		if !strings.Contains(info.FullMethod, "/roles.Roles") {
+		if !strings.Contains(info.FullMethod, "/roles.Roles/GetUserRoles") {
 			return handler(ctx, req)
 		}
 

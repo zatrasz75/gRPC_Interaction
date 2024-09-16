@@ -28,6 +28,9 @@ type Config struct {
 	Token struct {
 		SecretKeyHere string `yaml:"secret-key-here" env:"SECRET_KEY_TOKEN"`
 	} `yaml:"token"`
+	Internal struct {
+		Roles_service_address string `yaml:"roles_Service_Address" env:"ROLES_INTERNAL"`
+	} `yaml:"internal"`
 }
 
 func NewConfig(path string) (*Config, error) {

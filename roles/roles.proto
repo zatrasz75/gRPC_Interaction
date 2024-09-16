@@ -6,6 +6,7 @@ option go_package = "roles/pkg/grpc/roles";
 
 service Roles {
   rpc GetUserRoles(UserIdRequest) returns (UserRolesResponse) {}
+  rpc GetRoles(IdRequest) returns (RolesResponse) {}
 }
 
 message UserIdRequest {
@@ -14,5 +15,14 @@ message UserIdRequest {
 }
 
 message UserRolesResponse {
+  repeated string Roles = 1;
+}
+
+message IdRequest {
+  string ID = 1;
+
+}
+
+message RolesResponse {
   repeated string Roles = 1;
 }
