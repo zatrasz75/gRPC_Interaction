@@ -12,7 +12,6 @@ import (
 
 func (s *Store) Register(c context.Context, request *authPb.RegisterRequest) (response *authPb.RegisterResponse, err error) {
 	var u models.Users
-	u.Name = request.Name
 	u.Email = request.Email
 	u.Password = request.Password
 	u.Date = time.Now().UTC()

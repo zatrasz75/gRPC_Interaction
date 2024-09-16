@@ -1,13 +1,109 @@
-version: '3.9'
+version: '3.8'
 services:
-  postgres:
+  auth_service:
     env_file:
-      - .env
+      - auth/.env
+    build:
+      context: ./auth
+      dockerfile: Dockerfile
+    restart: always
+    networks:
+      - auth_network
+    depends_on:
+      - auth_db
+    ports:
+      - "50051:50051"
+
+  roles_service:
+    build:
+      context: ./roles
+      dockerfile: Dockerfile
+    restart: always
+    env_file:
+      - roles/.env
+    networks:
+      - roles_network
+    depends_on:
+      - roles_db
+    ports:
+      - "50052:50052"
+
+  user_info_service:
+    build:
+      context: ./users
+      dockerfile: Dockerfile
+    restart: always
+    env_file:
+      - users/.env
+    networks:
+      - user_info_network
+    depends_on:
+      - user_info_db
+    ports:
+      - "50054:50054"
+
+#  notifications_service:
+#    build:
+#      context: ./notifications
+#      dockerfile: Dockerfile
+#    environment:
+#      - HOST_DB=notifications_db
+#      - POSTGRES_USER=notifications_user
+#      - POSTGRES_PASSWORD=password
+#      - POSTGRES_DB=notifications_db
+#      - PORT_DB=49054
+#    networks:
+#      - notifications_network
+#    depends_on:
+#      - notifications_db
+#    ports:
+#      - "50054:8080"
+
+  auth_db:
     image: postgres:latest
-    container_name: gRPC-Interaction
+    env_file:
+      - auth/.env
     restart: always
     ports:
       - "49051:5432"
+    networks:
+      - auth_network
 
+  roles_db:
+    image: postgres:latest
+    env_file:
+      - roles/.env
+    restart: always
+    ports:
+      - "49052:5432"
+    networks:
+      - roles_network
 
-# docker compose up -d
+  user_info_db:
+    image: postgres:latest
+    env_file:
+      - users/.env
+    restart: always
+    ports:
+      - "49053:5432"
+    networks:
+      - user_info_network
+
+#  notifications_db:
+#    image: postgres:latest
+#    environment:
+#      POSTGRES_USER: notifications_user
+#      POSTGRES_PASSWORD: password
+#      POSTGRES_DB: notifications_db
+#    ports:
+#      - "49054:5432"
+#    networks:
+#      - notifications_network
+
+networks:
+  auth_network:
+  roles_network:
+  user_info_network:
+#  notifications_network:
+
+# docker-compose up -d

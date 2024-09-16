@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package users;
+
+option go_package = "users/pkg/grpc/users";
+
+service Profile {
+  rpc GetProfileUsers(ProfileIdRequest) returns (ProfileUserResponse) {
+  }
+}
+
+message ProfileIdRequest {
+  string ID = 1;
+}
+
+message ProfileUserResponse {
+  repeated string Roles = 1;
+  string Name = 2;
+  string Surname = 3;
+  string Patronymic = 4;
+  string Email = 5;
+}

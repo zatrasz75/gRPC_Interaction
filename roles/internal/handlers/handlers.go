@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"context"
-	"fmt"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"strconv"
@@ -13,9 +12,6 @@ import (
 
 func (s *Store) GetUserRoles(c context.Context, request *rplesPb.UserIdRequest) (response *rplesPb.UserRolesResponse, err error) {
 	payload := payloads.ExtractPayload(c)
-	if payload == nil {
-		fmt.Println("payload = nil", payload.Id)
-	}
 	id, _ := strconv.Atoi(payload.Id)
 
 	var u models.Users

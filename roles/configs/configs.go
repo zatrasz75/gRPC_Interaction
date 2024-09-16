@@ -12,7 +12,7 @@ type Config struct {
 		AddrPort string `yaml:"port" env:"APP_PORT" env-default:"50052"`
 	} `yaml:"GRPC"`
 	PostgreSQL struct {
-		ConnStr string `env:"DB_CONNECTION_STRING"`
+		ConnStr string `yaml:"conn-str" env:"DB_CONNECTION_STRING"`
 
 		Host     string `yaml:"host" env:"HOST_DB"`
 		User     string `yaml:"username" env:"POSTGRES_USER"`
@@ -22,8 +22,8 @@ type Config struct {
 		Port     string `yaml:"port" env:"PORT_DB"`
 
 		PoolMax      int           `yaml:"pool-max" env:"PG_POOL_MAX" env-default:"2"`
-		ConnAttempts int           `yaml:"conn-attempts" env:"PG_CONN_ATTEMPTS" env-default:"5"`
-		ConnTimeout  time.Duration `yaml:"conn-timeout" env:"PG_TIMEOUT" env-default:"2s"`
+		ConnAttempts int           `yaml:"conn-attempts" env:"PG_CONN_ATTEMPTS" env-default:"7"`
+		ConnTimeout  time.Duration `yaml:"conn-timeout" env:"PG_TIMEOUT" env-default:"3s"`
 	} `yaml:"database"`
 	Token struct {
 		SecretKeyHere string `yaml:"secret-key-here" env:"SECRET_KEY_TOKEN"`

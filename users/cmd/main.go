@@ -5,7 +5,8 @@ import (
 	"os"
 	"path/filepath"
 	"zatrasz75/gRPC_Interaction/users/configs"
-	logger "zatrasz75/gRPC_Interaction/users/pkg"
+	"zatrasz75/gRPC_Interaction/users/internal/app"
+	"zatrasz75/gRPC_Interaction/users/pkg/logger"
 )
 
 func main() {
@@ -17,13 +18,22 @@ func main() {
 		fmt.Println("Ошибка при получении текущего рабочего каталога:", err)
 		return
 	}
+	fmt.Println(cwd)
 	// Построение абсолютного пути к файлу configs.yml
 	configPath := filepath.Join(cwd, "configs", "configs.yml")
+	fmt.Println(configPath)
+	if _, err = os.Stat(configPath); os.IsNotExist(err) {
+		configPath = filepath.Join(cwd, "..", "configs", "configs.yml")
+	}
+	fmt.Println(configPath)
 
 	// Configuration
 	cfg, err := configs.NewConfig(configPath)
 	if err != nil {
 		l.Fatal("ошибка при разборе конфигурационного файла", err)
 	}
-	fmt.Println(cfg)
+
+	fmt.Println("ConnStr --- ", cfg.PostgreSQL.ConnStr)
+
+	app.Run(cfg, l)
 }

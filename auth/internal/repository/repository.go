@@ -2,7 +2,6 @@ package repository
 
 import (
 	"context"
-	"database/sql"
 	"errors"
 	"fmt"
 	"github.com/jackc/pgx/v5"
@@ -34,26 +33,15 @@ func (s *Store) UserVerification(u models.Users) (bool, error) {
 	return exists, err
 }
 
-// CreateUser Добавляет нового пользователя и назначает роль по умолчанию Guest
+// CreateUser Добавляет нового пользователя
 func (s *Store) CreateUser(u models.Users) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
-	query := "INSERT INTO users (name, email, password, data) VALUES ($1, $2, $3, $4) RETURNING id"
-	var userId int
-	err := s.Pool.QueryRow(ctx, query, u.Name, u.Email, u.Password, u.Date).Scan(&userId)
+	query := "INSERT INTO users (email, password, data) VALUES ($1, $2, $3)"
+	_, err := s.Pool.Exec(ctx, query, u.Email, u.Password, u.Date)
 	if err != nil {
-		if err == sql.ErrNoRows {
-			return fmt.Errorf("ни один пользователь не был добавлен")
-		}
 		return fmt.Errorf("не удалось вставить пользователя: %w", err)
-	}
-
-	// Назначение роли пользователю
-	roleQuery := "INSERT INTO user_roles (user_id, role_id) VALUES ($1, (SELECT id FROM roles WHERE name = 'Guest' LIMIT 1))"
-	_, err = s.Pool.Exec(ctx, roleQuery, userId)
-	if err != nil {
-		return fmt.Errorf("не удалось назначить роль пользователю: %w", err)
 	}
 
 	return nil

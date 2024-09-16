@@ -6,8 +6,10 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/jackc/pgx/v5/stdlib"
 	"github.com/rubenv/sql-migrate"
+	"os"
+	"path/filepath"
 	"time"
-	"zatrasz75/gRPC_Interaction/roles/pkg/logger"
+	"zatrasz75/gRPC_Interaction/users/pkg/logger"
 )
 
 // Postgres Хранилище данных
@@ -68,9 +70,22 @@ func (p *Postgres) Close() {
 
 // Migrate Миграция таблиц
 func (p *Postgres) Migrate(l logger.LoggersInterface) error {
+	// Получаем текущий рабочий каталог
+	cwd, err := os.Getwd()
+	if err != nil {
+		fmt.Println("Ошибка при получении текущего рабочего каталога:", err)
+		return err
+	}
+
+	// Построение абсолютного пути к файлу configs.yml
+	configPath := filepath.Join(cwd, "migrations")
+	if _, err = os.Stat(configPath); os.IsNotExist(err) {
+		configPath = filepath.Join(cwd, "..", "migrations")
+	}
+
 	// Прочитать миграции из папки:
 	migrations := &migrate.FileMigrationSource{
-		Dir: "migrations",
+		Dir: configPath,
 	}
 
 	// Преобразование pgxpool.Pool в *sql.DB

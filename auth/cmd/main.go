@@ -19,13 +19,20 @@ func main() {
 		return
 	}
 	// Построение абсолютного пути к файлу configs.yml
-	configPath := filepath.Join(cwd, "auth/configs", "configs.yml")
+	configPath := filepath.Join(cwd, "auth", "configs", "configs.yml")
+	fmt.Println(configPath)
+	if _, err = os.Stat(configPath); os.IsNotExist(err) {
+		configPath = filepath.Join(cwd, "..", "configs", "configs.yml")
+	}
+	fmt.Println(configPath)
 
 	// Configuration
 	cfg, err := configs.NewConfig(configPath)
 	if err != nil {
 		l.Fatal("ошибка при разборе конфигурационного файла", err)
 	}
+
+	fmt.Println("ConnStr --- ", cfg.PostgreSQL.ConnStr)
 
 	app.Run(cfg, l)
 }

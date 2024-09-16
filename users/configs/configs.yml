@@ -1,3 +1,14 @@
 GRPC:
-  host: 0.0.0.0
-  port: 50051
+  host: localhost
+  port: 5003
+
+database:
+  host: postgres
+  username: user_info_user
+  password: password
+  db-url: localhost
+  db-name: user_info_db
+  port: 49053
+
+token:
+  secret-key-here: secret_password
